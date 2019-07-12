@@ -17,7 +17,7 @@ function createBalls(num, balls=[]) {
   return createBalls(
     num-1, 
     [ ...balls, 
-      Ball(CONTEXT, 100, 'green', ~~WIDTH/2, 80) ]
+      Ball(context, 10, 'green', ~~windowWidth/2, 80) ]
   )
 }
 
@@ -30,9 +30,10 @@ function draw(ball) {
 }
 
 function applyGravity(ball) {
+  const gravity = 1;
   return moveY({
     ...ball,
-    velocityY: ball.velocityY + G,
+    velocityY: ball.velocityY + gravity,
   })
 }
 
@@ -44,16 +45,23 @@ function moveY(ball) {
 }
 
 function bounce(ball) {
-  if (ball.posY + ball.radius > HEIGHT) {
+  if (ball.posY + ball.radius > windowHeight) {
     return reverseDirection(ball);
   }
   return ball;
 }
 
 function reverseDirection(ball) {
-  return {
+  return friction({
     ...ball,
     velocityY: ball.velocityY * -1,
-    posY: HEIGHT - ball.radius
+    posY: windowHeight - ball.radius
+  })
+}
+
+function friction(ball) {
+  return {
+    ...ball,
+    velocityY: ball.velocityY + 1
   }
 }
